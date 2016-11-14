@@ -30,6 +30,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
     private Graphics dbg;
     private Random rand;
     private int maxShotNum = 20;
+    private int shotCount;
 
     public Shootingspaceship() {
         setBackground(Color.black);
