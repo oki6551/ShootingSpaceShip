@@ -21,6 +21,7 @@ public class Enemy {
     private int max_y;
     private float delta_y_inc;
     private final int collision_distance = 10;
+    private int healthPoint;
 
     public Enemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
         x_pos = x;
@@ -30,6 +31,7 @@ public class Enemy {
         this.max_x = max_x;
         this.max_y = max_y;
         this.delta_y_inc = delta_y_inc;
+        healthPoint = 10;
     }
 
     public void move() {
@@ -49,16 +51,18 @@ public class Enemy {
         }
     }
 
-    public boolean isCollidedWithShot(Shot[] shots) {
-        for (Shot shot : shots) {
-            if (shot == null) {
-                continue;
-            }
-            if (-collision_distance <= (y_pos - shot.getY()) && (y_pos - shot.getY() <= collision_distance)) {
-                if (-collision_distance <= (x_pos - shot.getX()) && (x_pos - shot.getX() <= collision_distance)) {
-                    //collided.
-                    shot.collided();
-                    return true;
+    public boolean isCollidedWithShot(ShotType[][] shots) {
+        for(ShotType[] shoted : shots) {
+            for (ShotType shot : shoted) {
+                if (shot == null) {
+                    continue;
+                }
+                if (-collision_distance <= (y_pos - shot.getY()) && (y_pos - shot.getY() <= collision_distance)) {
+                    if (-collision_distance <= (x_pos - shot.getX()) && (x_pos - shot.getX() <= collision_distance)) {
+                        //collided.
+                        healthPoint = shot.collided(healthPoint);
+                        return true;
+                    }
                 }
             }
         }
@@ -80,5 +84,8 @@ public class Enemy {
         int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
         int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
         g.fillPolygon(x_poly, y_poly, 4);
+    }
+    public int getHealth() {
+        return healthPoint;
     }
 }
